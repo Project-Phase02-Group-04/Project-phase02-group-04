@@ -14,3 +14,9 @@ Features
 10.
 
 # Login
+```
+{
+  email : string
+  password : string
+}
+```
