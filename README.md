@@ -15,17 +15,19 @@ Features
 
 
 # Database 
-```
+``
 Di dalam database ada 
   1.Users
-  2.
-```
+  2.Hobbies
+``
 
 ```
+Users
 {
   id:integer,
   email:string,
-  password:string
+  password:string,
+  HobbiesId: Integer
 }
 ```
 
@@ -33,7 +35,8 @@ Di dalam database ada
 ```
 {
   email : string,
-  password : string
+  password : string,
+  hobbies: string,
 }
 ```
 
