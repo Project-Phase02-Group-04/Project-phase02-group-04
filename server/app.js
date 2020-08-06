@@ -11,6 +11,6 @@ app.use(cors());
 app.use(express.urlencoded({extended: false}));
 
 app.use('/', routes);
-app.use(ErrorHandler);
+// app.use(ErrorHandler);
 
 app.listen(port, () => console.log(`App listening at http://localhost:${port}`));
