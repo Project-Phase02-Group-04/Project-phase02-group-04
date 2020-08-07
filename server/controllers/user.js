@@ -1,6 +1,8 @@
 const { User } = require('../models');
 const { compare } = require('../helpers/bcrypt')
 const { encode } = require('../helpers/jwt')
+const axios = require('axios');
+
 class UserController {
   static async login(req, res, next) {
     const { email, password } = req.body
@@ -15,6 +17,9 @@ class UserController {
           const token = encode(dataToken)
           return res.status(200).json(token)
         } else {
+          next({
+            errorCode: ''
+          });
           return res.status(401).json({ message: "email or password incrorrect" })
         }
       } else {
@@ -37,6 +42,28 @@ class UserController {
     }
   }
 
+  static async getNews(req, res, next) {
+    try {
+      const result = await axios({
+        method: 'get',
+        url: 'https://content.guardianapis.com/search',
+        headers: {
+          "api-key": '17eaacc7-e89e-430e-826f-8f604853c397'
+        },
+        params: {
+          "q": req.userLogin.hobbies
+        }
+      })
+
+      let news = result.data.response.results;
+
+      res.status(200).json({
+        news
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
 }
 
 module.exports = UserController

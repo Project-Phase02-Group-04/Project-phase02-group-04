@@ -6,7 +6,7 @@ module.exports = class Auth {
         try {
             const userToken = jwt.verify(
                 req.headers.accesstoken,
-                process.env.JWT_SECRET
+                process.env.SECRET
             );
 
             let data = await User.findOne({
@@ -19,6 +19,7 @@ module.exports = class Auth {
             next();
 
         } catch (error) {
+            console.log(error);
             next({
                 code: 409,
                 type: 'token',

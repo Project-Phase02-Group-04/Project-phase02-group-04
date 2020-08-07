@@ -4,5 +4,6 @@ const { Auth } = require('../middlewares');
 
 router.post('/login',UserController.login)
 router.post('/register',UserController.register)
+router.get('/', Auth.check, UserController.getNews)
 
 module.exports= router
