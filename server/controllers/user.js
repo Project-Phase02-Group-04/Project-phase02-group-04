@@ -2,6 +2,7 @@ const { User } = require('../models');
 const { compare } = require('../helpers/bcrypt')
 const { encode } = require('../helpers/jwt')
 const axios = require('axios');
+const { OAuth2Client } = require('google-auth-library');
 
 class UserController {
   static async login(req, res, next) {
@@ -15,7 +16,7 @@ class UserController {
             hobbies: loginData.hobbies
           }
           const token = encode(dataToken)
-          return res.status(200).json({token})
+          return res.status(200).json({ token })
         } else {
           next({
             errorCode: ''
@@ -63,6 +64,46 @@ class UserController {
     } catch (error) {
       console.log(error)
     }
+  }
+
+  static async googleOauth(req, res, next) {
+    const token = req.headers.id_token
+    const client = new OAuth2Client(process.env.CLIENT_ID);
+    // async function verify() {
+    try {
+      const ticket = await client.verifyIdToken({
+        idToken: token,
+        audience: process.env.CLIENT_ID,  // Specify the CLIENT_ID of the app that accesses the backend
+        // Or, if multiple clients access the backend:
+        //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+      });
+      const payload = ticket.getPayload();
+      // console.log(payload)
+      // const userid = payload['sub'];
+
+
+      const loginData = await User.findOne({ where: { email: payload.email } })
+      if (loginData) {
+        const dataToken = {
+          email: loginData.email,
+          hobbies: loginData.hobbies
+        }
+        const token = encode(dataToken)
+        return res.status(200).json({ token })        
+      } else {
+
+        const regisData = User.create({
+          email: payload.email,
+          hobbies: "sport"
+          , password: "123456"
+        })
+      }
+
+    } catch (error) {
+      console.log(error,'<<<<<<<<<')
+    }
+    // }
+
   }
 }
 

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Tailwind -->
     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
-
+    <meta name="google-signin-client_id" content="432066184354-q69fr0arvbpokl3bclpranm14ebqhufu.apps.googleusercontent.com">
     <title>PORTAL PROJECT KITA</title>
 </head>
 <body>  
@@ -33,6 +33,7 @@
                         Sign In 
                         <!-- Type Submit -->
                     </button>
+                  <div class="g-signin2" data-onsuccess="onSignIn">afawf</div>
                     <button id="register-button" class="bg-transparent hover:bg-red-500 text-red-500 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded-full" type="button">
                         Register
                         <!-- ID : register-button -->
@@ -126,6 +127,7 @@
     
     
     </div>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="main.js"></script>
 </body>
