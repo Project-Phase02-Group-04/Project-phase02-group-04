@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Project Phase 02 KAPTEN KLAUSTIN WIJAYA, AHMAD FIRAZ DAN ABDULLAH BASAFI ",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
