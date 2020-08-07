@@ -5,5 +5,4 @@ const { Auth } = require('../middlewares');
 router.post('/login',UserController.login)
 router.post('/register',UserController.register)
 
-
 module.exports= router
