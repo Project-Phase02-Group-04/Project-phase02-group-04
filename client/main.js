@@ -1,9 +1,10 @@
 
-function showDashboard(){
+function showHomepage(){
     $('.form-login').hide()
     $('.register-page').hide()
     $('#homepage').show()
-    $("#current-user").html(currentUser(localStorage.email))
+    $("#current-user").html(`<h1> WELCOME USER ${currentUser(localStorage.email)}</h1>`)
+    // fetchNews()
 }
 
 function currentUser(email){
@@ -15,7 +16,7 @@ function currentUser(email){
             str+= email[i]
         }
     }
-    return str
+    return str.toUpperCase()
 }
 
 function logout(){
@@ -25,7 +26,7 @@ function logout(){
 
 function isLogin(){
     if(localStorage.access_token){
-        showDashboard()
+        showHomepage()
         fetchNews()
     }else{
         showLogin()
@@ -49,6 +50,25 @@ function reloadHomepage(){
     $('#homepage').empty()
 }
 
+function randomText(){
+    const random = Math.floor(Math.random() * 3)
+    let colors = ''
+    switch(random){
+        case 1 : 
+            colors = `red`
+            break
+        case 2 : 
+            colors = `blue`
+            break
+        case 3 : 
+            colors = `green`
+            break
+        default :
+            colors = `orange`
+    }
+    return colors
+}
+
 function dataOfNews(data){
     data.forEach(el => {
         
@@ -63,8 +83,27 @@ function fetchNews(){
             },
         })
         .done(data=>{
-            // dataOfNews(data)
             console.log(data.news)
+            const news = data.news
+            news.forEach(el=>{
+                $(".cards").append(
+                `<div id="${el.id}" class="flex bg-gray-200">
+                    <div  class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
+                        <div class="max-w-sm rounded overflow-hidden shadow-lg">
+                            <!-- <img class="w-full" src="/img/card-top.jpg" alt="Sunset in the mountains"> -->
+                            <div class="px-6 bg-${randomText()}-500 py-4">
+                                <div class="font-bold text-xl mb-2">${el.webTitle}</div>
+                                <button><span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"><a href="${el.webUrl}">READ MORE HERE!</a></span></button>
+                            </div>
+
+                            <div class="px-6 py-4">
+                            <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">#${el.sectionName}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>`
+                )
+            })
         })
         .fail(err=>{
             console.log(err)
@@ -75,7 +114,7 @@ function fetchNews(){
 }
 
 $(document).ready(()=>{
-    // showDashboard()
+    // showHomepage()
     isLogin()
     
 //EVENT FORM BROOOOOOOOOOOOOOOOH
