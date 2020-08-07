@@ -46,8 +46,8 @@ function showRegister(){
     $('#homepage').hide()
 }
 
-function reloadHomepage(){
-    $('#homepage').empty()
+function reloadCards(){
+    $('.cards').empty()
 }
 
 function randomText(){
@@ -76,6 +76,7 @@ function dataOfNews(data){
 }
 
 function fetchNews(){
+        reloadCards()
         $.ajax('http://localhost:3000/', {
             method : "GET",
             headers: {
@@ -83,19 +84,24 @@ function fetchNews(){
             },
         })
         .done(data=>{
-            console.log(data.news)
             const news = data.news
             news.forEach(el=>{
                 $(".cards").append(
                 `<div id="${el.id}" class="flex bg-gray-200">
-                    <div  class="flex-1 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
+                    <div  class="flex-2 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
                         <div class="max-w-sm rounded overflow-hidden shadow-lg">
-                            <!-- <img class="w-full" src="/img/card-top.jpg" alt="Sunset in the mountains"> -->
+                            <img class="w-full" src="${el.fields.thumbnail}" alt="Sunset in the mountains">
                             <div class="px-6 bg-${randomText()}-500 py-4">
                                 <div class="font-bold text-xl mb-2">${el.webTitle}</div>
-                                <button><span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"><a href="${el.webUrl}">READ MORE HERE!</a></span></button>
+                                
                             </div>
-
+                            
+                            <div class="px-6 py-4">
+                                <p class="text-gray-700 text-base">
+                                ${el.fields.trailText}
+                                </p>
+                            </div>
+                            <button><span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"><a href="${el.webUrl}">READ MORE HERE!</a></span></button>
                             <div class="px-6 py-4">
                             <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">#${el.sectionName}</span>
                             </div>
