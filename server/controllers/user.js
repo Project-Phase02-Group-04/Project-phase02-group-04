@@ -15,7 +15,7 @@ class UserController {
             hobbies: loginData.hobbies
           }
           const token = encode(dataToken)
-          return res.status(200).json(token)
+          return res.status(200).json({token})
         } else {
           next({
             errorCode: ''

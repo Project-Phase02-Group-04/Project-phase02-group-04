@@ -5,7 +5,7 @@ module.exports = class Auth {
     static async check(req, res, next) {
         try {
             const userToken = jwt.verify(
-                req.headers.accesstoken,
+                req.headers.access_token,
                 process.env.SECRET
             );
 
