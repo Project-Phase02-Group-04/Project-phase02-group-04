@@ -1,19 +1,15 @@
 # Project-phase02-group-04
 Projects pertama - PORTAL NEWS
 
-Flow => 
-
 Features 
-1. Fitur Register =>
-2. Fitur Login =>
-3. Sequelize Database => Klaustin
-4. Authentication => 
-5. Authorize => 
-6. 
-7.
-8.
-9.
-10.
+1. Fitur Register 
+2. Fitur Login 
+3. Sequelize Database 
+4. Authentication 
+5. Authorize 
+6. client
+7. third party api  
+8. google oauth
 
 
 # Database 
