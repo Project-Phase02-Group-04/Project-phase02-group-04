@@ -1,93 +1,122 @@
 
-function showHomepage(){
+function showHomepage() {
     $('.form-login').hide()
     $('.register-page').hide()
     $('#homepage').show()
     $("#current-user").html(`<h1> WELCOME USER ${currentUser(localStorage.email)}</h1>`)
     // fetchNews()
 }
+function logout() {
+    localStorage.clear()
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
 
-function currentUser(email){
+    showLogin()
+}
+
+function onSignIn(googleUser) {
+    // var profile = googleUser.getBasicProfile();
+    // console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+    // console.log('Name: ' + profile.getName());
+    // console.log('Image URL: ' + profile.getImageUrl());
+    // console.log('Email: ' + profile.getEmail())
+    var id_token = googleUser.getAuthResponse().id_token;
+    $.ajax({
+        method: "post",
+        url: "http://localhost:3000/googleoauth",
+        headers: {
+            id_token
+        }
+    })
+    .done((result)=>{
+        localStorage.access_token= result.token
+        console.log(result)
+    })
+    .fail((err)=>{
+        console.log(err)
+    })
+}
+
+function currentUser(email) {
     let str = ''
     for (let i = 0; i < email.length; i++) {
-        if(email[i] == '@'){
+        if (email[i] == '@') {
             break
-        }else{
-            str+= email[i]
+        } else {
+            str += email[i]
         }
     }
     return str.toUpperCase()
 }
 
-function logout(){
-    localStorage.clear()
-    showLogin()
-}
 
-function isLogin(){
-    if(localStorage.access_token){
+
+function isLogin() {
+    if (localStorage.access_token) {
         showHomepage()
         fetchNews()
-    }else{
+    } else {
         showLogin()
     }
 }
 
-function showLogin(){
+function showLogin() {
     $('.form-login').show()
     $('.register-page').hide()
     $('#homepage').hide()
-    
+
 }
 
-function showRegister(){
+function showRegister() {
     $('.form-login').hide()
     $('.register-page').show()
     $('#homepage').hide()
 }
 
-function reloadCards(){
+function reloadCards() {
     $('.cards').empty()
 }
 
-function randomText(){
+function randomText() {
     const random = Math.floor(Math.random() * 3)
     let colors = ''
-    switch(random){
-        case 1 : 
+    switch (random) {
+        case 1:
             colors = `red`
             break
-        case 2 : 
+        case 2:
             colors = `blue`
             break
-        case 3 : 
+        case 3:
             colors = `green`
             break
-        default :
+        default:
             colors = `orange`
     }
     return colors
 }
 
-function dataOfNews(data){
+function dataOfNews(data) {
     data.forEach(el => {
-        
+
     });
 }
 
-function fetchNews(){
-        reloadCards()
-        $.ajax('http://localhost:3000/', {
-            method : "GET",
-            headers: {
-                access_token : localStorage.access_token
-            },
-        })
-        .done(data=>{
+function fetchNews() {
+    reloadCards()
+    $.ajax('http://localhost:3000/', {
+        method: "GET",
+        headers: {
+            access_token: localStorage.access_token
+        },
+    })
+        .done(data => {
             const news = data.news
-            news.forEach(el=>{
+            news.forEach(el => {
                 $(".cards").append(
-                `<div id="${el.id}" class="flex bg-gray-200">
+                    `<div id="${el.id}" class="flex bg-gray-200">
                     <div  class="flex-2 text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">
                         <div class="max-w-sm rounded overflow-hidden shadow-lg">
                             <img class="w-full" src="${el.fields.thumbnail}" alt="Sunset in the mountains">
@@ -111,83 +140,84 @@ function fetchNews(){
                 )
             })
         })
-        .fail(err=>{
+        .fail(err => {
             console.log(err)
         })
-        .always(()=>{
+        .always(() => {
             console.log('LOGIN SUCCES BROH')
         })
 }
 
-$(document).ready(()=>{
+$(document).ready(() => {
     // showHomepage()
     isLogin()
-    
-//EVENT FORM BROOOOOOOOOOOOOOOOH
+
+    //EVENT FORM BROOOOOOOOOOOOOOOOH
     // EVENT LOGIN-REGISTER
-    $("#login-form").submit(event=>{
+    $("#login-form").submit(event => {
         event.preventDefault()
         const email = $("#email-login").val()
         const password = $("#password-login").val()
         $.ajax('http://localhost:3000/login', {
-            method : "POST",
-            data : {
+            method: "POST",
+            data: {
                 email,
                 password
             }
         })
-        .done(data=>{
-            // console.log(data)
-            localStorage.access_token = data.token
-            localStorage.email = email
-            $("#password-register").val('')
-            $("#email-register").val('')
-            isLogin()
-        })
-        .fail(err=>{
-            console.log(err)
-        })
-        .always(()=>{
-            console.log('LOGIN SUCCES BROH')
-        })
+            .done(data => {
+                // console.log(data)
+                localStorage.access_token = data.token
+                localStorage.email = email
+                $("#password-register").val('')
+                $("#email-register").val('')
+                isLogin()
+            })
+            .fail(err => {
+                console.log(err)
+            })
+            .always(() => {
+                console.log('LOGIN SUCCES BROH')
+            })
     })
-    
+
     // REGISTER BERHASIL!! AWAS KALO NGGA
-    $('#register-form').submit(event=>{
+    $('#register-form').submit(event => {
         event.preventDefault()
         const email = $("#email-register").val()
         const password = $("#password-register").val()
         const hobbies = $("#hobbies-register").val()
         $.ajax('http://localhost:3000/register', {
-            method : "POST",
-            data : {
+            method: "POST",
+            data: {
                 email,
                 password,
                 hobbies
             }
         })
-        .done(data=>{
-            $("#password-register").val('')
-            $("#email-register").val('')
-        })
-        .fail(err=>{
-            console.log(err)
-        })
-        .always(()=>{
-            console.log('REGISTRATION SUCCES BROH')
-        })
+            .done(data => {
+                $("#password-register").val('')
+                $("#email-register").val('')
+            })
+            .fail(err => {
+                console.log(err)
+            })
+            .always(() => {
+                console.log('REGISTRATION SUCCES BROH')
+            })
     })
 
-// EVENT BUTTON BROOOOOOOOOOOOOOOOOOOOH
-    $('#register-button').click(event=>{
+    // EVENT BUTTON BROOOOOOOOOOOOOOOOOOOOH
+    $('#register-button').click(event => {
         event.preventDefault()
         showRegister()
     })
 
-    $("#logoutButton").click(event=>{
+    
+
+    $("#logoutButton").click(event => {
         event.preventDefault()
         logout()
-    })  
+    })
 
-    
 })
